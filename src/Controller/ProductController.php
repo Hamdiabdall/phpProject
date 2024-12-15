@@ -60,29 +60,30 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('product_index');
         }
 
-        return $this->render('product/edit.html.twig', ['product' => $product,
+        return $this->render('product/edit.html.twig', [
+            'product' => $product,
             'form' => $form->createView(),
         ]);
     }
 
     #[Route('/product/delete/{id}', name: 'product_delete', methods: ['POST'])]
-public function delete(Request $request, Product $product, EntityManagerInterface $em): Response
-{
-    // Validate the CSRF token to prevent CSRF attacks
-    if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->request->get('_token'))) {
-        $em->remove($product);
-        $em->flush();
+    public function delete(Request $request, Product $product, EntityManagerInterface $em): Response
+    {
+        // Validate the CSRF token to prevent CSRF attacks
+        if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->request->get('_token'))) {
+            $em->remove($product);
+            $em->flush();
 
-        // Flash success message after deletion
-        $this->addFlash('success', 'Product deleted successfully!');
-    } else {
-        // Flash error message if CSRF token is invalid
-        $this->addFlash('error', 'Invalid CSRF token.');
+            // Flash success message after deletion
+            $this->addFlash('success', 'Product deleted successfully!');
+        } else {
+            // Flash error message if CSRF token is invalid
+            $this->addFlash('error', 'Invalid CSRF token.');
+        }
+
+        // Redirect back to the product list page
+        return $this->redirectToRoute('product_index');
     }
-
-    // Redirect back to the product list page
-    return $this->redirectToRoute('product_index');
-}
 
     private function handleFileUpload($form, Product $product, SluggerInterface $slugger)
     {
