@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <h1>Product List</h1>
+    <a href="{{ path('product_new') }}" class="btn btn-primary mb-3">Add New Product</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
+                <td>
+                    {% if product.image %}
+                    <img src="{{ asset('uploads/' ~ product.image) }}" alt="{{ product.name }}" style="width: 100px;">
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('product_edit', {id: product.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+
+                    <!-- Delete Form with POST method and CSRF Token -->
+                    <form action="{{ path('product_delete', {id: product.id}) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
