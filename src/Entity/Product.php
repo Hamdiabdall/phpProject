@@ -29,9 +29,9 @@ class Product
     private ?string $image = null;
 
     /**
-     * @var Collection<int, categorie>
+     * @var Collection<int, Categorie>
      */
-    #[ORM\OneToMany(targetEntity: categorie::class, mappedBy: 'product')]
+    #[ORM\OneToMany(targetEntity: Categorie::class, mappedBy: 'product')]
     private Collection $categorie;
 
     public function __construct()
@@ -52,7 +52,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -64,7 +63,6 @@ class Product
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -76,7 +74,6 @@ class Product
     public function setPrice(float $price): static
     {
         $this->price = $price;
-
         return $this;
     }
 
@@ -88,29 +85,28 @@ class Product
     public function setImage(string $image): static
     {
         $this->image = $image;
-
         return $this;
     }
 
     /**
-     * @return Collection<int, categorie>
+     * @return Collection<int, Categorie>
      */
     public function getCategorie(): Collection
     {
         return $this->categorie;
     }
 
-    public function addCategorie(categorie $categorie): static
+    public function addCategorie(Categorie $categorie): static
     {
         if (!$this->categorie->contains($categorie)) {
             $this->categorie->add($categorie);
-            $categorie->setProduct($this);
+            $categorie->setProduct($this);  // Ensures bidirectional association
         }
 
         return $this;
     }
 
-    public function removeCategorie(categorie $categorie): static
+    public function removeCategorie(Categorie $categorie): static
     {
         if ($this->categorie->removeElement($categorie)) {
             // set the owning side to null (unless already changed)
